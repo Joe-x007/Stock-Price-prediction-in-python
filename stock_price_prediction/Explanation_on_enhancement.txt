@@ -1,0 +1,64 @@
+Code Explanation
+1. Additional Technical Indicators
+add_technical_indicators(data)
+
+This function computes extra technical indicators to help the model capture market trends:
+Bollinger Bands:
+It calculates a 20-day moving average (MA20) and standard deviation (Std20) of the closing price.
+It then computes the upper and lower Bollinger Bands as:
+Upper_BB = MA20 + 2 * Std20
+Lower_BB = MA20 - 2 * Std20
+
+
+MACD and MACD Signal:
+It calculates the Exponential Moving Averages (EMAs) over 12 days and 26 days.
+The MACD line is obtained by subtracting the 26-day EMA from the 12-day EMA.
+A 9-day EMA of the MACD is computed as the signal line.
+
+
+2. Backtesting Strategy
+simple_backtest(predictions, actual, initial_capital=10000)
+This function simulates a basic trading strategy based on the predicted and actual stock prices:
+It starts with an initial capital (default $10,000).
+Buy Signal: If the predicted price is greater than the actual price and no stock is held, the script “buys” as many shares as possible.
+Sell Signal: If the predicted price falls below the actual price while holding stock, it “sells” all shares.
+It tracks and returns the portfolio value over time as a DataFrame.
+
+
+3. Hyperparameter Tuning for the LSTM Model
+build_model(hp, input_shape)
+This function builds an LSTM network using Keras where some parameters are tunable:
+It allows tuning of the number of LSTM units and dropout rates.
+It also provides an option to add a second LSTM layer.
+hyperparameter_tuning(X_train, y_train, input_shape)
+Uses Keras Tuner’s RandomSearch to automatically find the best hyperparameters based on validation loss. It returns the best model found.
+
+
+4. Sentiment Analysis Stub
+analyze_sentiment(news_headlines)
+A placeholder function for integrating sentiment analysis in the future. The stub currently returns a neutral sentiment score (0) but can be expanded using libraries like TextBlob or Vader.
+
+
+5. Main Workflow
+
+Data Collection & Feature Engineering:
+Downloads historical stock data (e.g., AAPL) using yfinance.
+Applies technical indicator calculations (Bollinger Bands, MACD) and computes additional features (lagged close, moving averages, RSI).
+
+
+Data Preprocessing:
+Drops rows with missing values.
+Normalizes the data using MinMaxScaler.
+Creates sequential data (using a window of 60 days) for the LSTM input.
+
+Training & Evaluation:
+Splits data into training and test sets (80/20 split).
+Uses hyperparameter tuning to build and select an optimal LSTM model.
+Further trains the best model and makes predictions.
+Inverse-scales the predictions and actual values to the original scale.
+Calculates RMSE as an evaluation metric.
+
+
+Visualization & Backtesting:
+Plots the actual versus predicted stock prices.
+Runs the backtesting simulation to generate a hypothetical portfolio value over time, which is also visualized.
